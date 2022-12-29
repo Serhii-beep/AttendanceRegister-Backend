@@ -2,7 +2,7 @@
 
 namespace Attendanceregister.DAL.Interfaces
 {
-    internal interface IMarkRepository : IRepository<Mark>
+    public interface IMarkRepository : IRepository<Mark>
     {
     }
 }

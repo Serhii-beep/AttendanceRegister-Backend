@@ -2,7 +2,7 @@
 
 namespace Attendanceregister.DAL.Interfaces
 {
-    internal interface IRepository<TEntity> where TEntity : BaseEntity
+    public interface IRepository<TEntity> where TEntity : BaseEntity
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
 

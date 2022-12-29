@@ -2,7 +2,7 @@
 
 namespace Attendanceregister.DAL.Interfaces
 {
-    internal interface IAdminRepository : IRepository<Admin>
+    public interface IAdminRepository : IRepository<Admin>
     {
     }
 }

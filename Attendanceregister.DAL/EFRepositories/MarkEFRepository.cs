@@ -4,7 +4,7 @@ using Attendanceregister.DAL.Interfaces;
 
 namespace Attendanceregister.DAL.EFRepositories
 {
-    internal class MarkEFRepository : EFRepository<Mark>, IMarkRepository
+    public class MarkEFRepository : EFRepository<Mark>, IMarkRepository
     {
         public MarkEFRepository(AttendanceRegisterDbContext context) : base(context)
         {

@@ -4,7 +4,7 @@ using Attendanceregister.DAL.Interfaces;
 
 namespace Attendanceregister.DAL.EFRepositories
 {
-    internal class SubjectClassEFRepository : EFRepository<SubjectClass>, ISubjectClassRepository
+    public class SubjectClassEFRepository : EFRepository<SubjectClass>, ISubjectClassRepository
     {
         public SubjectClassEFRepository(AttendanceRegisterDbContext context) : base(context)
         {

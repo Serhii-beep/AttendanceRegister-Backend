@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Attendanceregister.DAL.EFRepositories
 {
-    internal class EFRepository<T> : IRepository<T> where T : BaseEntity
+    public class EFRepository<T> : IRepository<T> where T : BaseEntity
     {
         protected AttendanceRegisterDbContext _context;
 

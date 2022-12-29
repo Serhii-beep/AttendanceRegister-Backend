@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Attendanceregister.DAL.Data
 {
-    internal class AttendanceRegisterDbContext : DbContext
+    public class AttendanceRegisterDbContext : DbContext
     {
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Attendance> Attendances { get; set; }

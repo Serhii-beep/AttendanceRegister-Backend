@@ -2,7 +2,7 @@
 
 namespace Attendanceregister.DAL.Interfaces
 {
-    internal interface ISubjectClassRepository : IRepository<SubjectClass>
+    public interface ISubjectClassRepository : IRepository<SubjectClass>
     {
     }
 }
