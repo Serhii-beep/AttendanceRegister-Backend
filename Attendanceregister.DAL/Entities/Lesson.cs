@@ -1,8 +1,7 @@
 ﻿namespace Attendanceregister.DAL.Entities
 {
-    public class Lesson
+    public class Lesson : BaseEntity
     {
-        public int Id { get; set; }
         public int SubjectClassId { get; set; }
         public string Theme { get; set; }
         public DateTime Date { get; set; }

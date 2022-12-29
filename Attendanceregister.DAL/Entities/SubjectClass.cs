@@ -1,8 +1,7 @@
 ﻿namespace Attendanceregister.DAL.Entities
 {
-    public class SubjectClass
+    public class SubjectClass : BaseEntity
     {
-        public int Id { get; set; }
         public int ClassId { get; set; }
         public int SubjectId { get; set; }
         public virtual Class Class { get; set; }

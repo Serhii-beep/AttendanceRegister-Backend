@@ -1,8 +1,7 @@
 ﻿namespace Attendanceregister.DAL.Entities
 {
-    public class Pupil
+    public class Pupil : BaseEntity
     {
-        public int Id { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
         public int ClassId { get; set; }

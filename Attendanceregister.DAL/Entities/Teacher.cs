@@ -1,8 +1,7 @@
 ﻿namespace Attendanceregister.DAL.Entities
 {
-    public class Teacher
+    public class Teacher : BaseEntity
     {
-        public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
