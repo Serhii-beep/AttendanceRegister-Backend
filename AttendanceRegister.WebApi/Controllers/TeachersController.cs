@@ -26,9 +26,9 @@ namespace AttendanceRegister.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public async Task<IActionResult> Authenticate(TeacherModel teacher)
+        public async Task<IActionResult> Authenticate(UserAuthorizationModel teacher)
         {
-            var teacherOr = await _teacherService.GetTeacherAsync(teacher.Login, teacher.Password);
+            var teacherOr = await _teacherService.GetTeacherAsync(teacher.Username, teacher.Password);
             if(!teacherOr.IsSuccess)
             {
                 return Unauthorized(teacherOr.Errors);
@@ -39,12 +39,12 @@ namespace AttendanceRegister.WebApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, teacher.Login)
+                    new Claim(ClaimTypes.Name, teacher.Username)
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(tokenHandler.WriteToken(token));
+            return Ok(new { token = tokenHandler.WriteToken(token), user = teacherOr.Entity });
         }
     }
 }

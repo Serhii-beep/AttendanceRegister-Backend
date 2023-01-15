@@ -1,4 +1,5 @@
-﻿using AttendanceRegister.BLL.Interfaces;
+﻿using Attendanceregister.DAL.Entities;
+using AttendanceRegister.BLL.Interfaces;
 using AttendanceRegister.BLL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,9 +27,9 @@ namespace AttendanceRegister.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public async Task<IActionResult> Authenticate(PupilModel pupil)
+        public async Task<IActionResult> Authenticate(UserAuthorizationModel pupil)
         {
-            var pupilOr = await _pupilService.GetPupilAsync(pupil.Login, pupil.Password);
+            var pupilOr = await _pupilService.GetPupilAsync(pupil.Username, pupil.Password);
             if(!pupilOr.IsSuccess)
             {
                 return Unauthorized(pupilOr.Errors);
@@ -39,12 +40,12 @@ namespace AttendanceRegister.WebApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, pupil.Login)
+                    new Claim(ClaimTypes.Name, pupil.Username)
                 }),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(tokenHandler.WriteToken(token));
+            return Ok(new { token = tokenHandler.WriteToken(token), user = pupilOr.Entity });
         }
     }
 }
