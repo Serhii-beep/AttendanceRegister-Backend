@@ -27,5 +27,11 @@ namespace AttendanceRegister.BLL.Services
             }
             return OperationResult<PupilModel>.Success(_mapper.Map<PupilModel>(pupil));
         }
+
+        public async Task<OperationResult<List<PupilModel>>> GetAllPupilsAsync()
+        {
+            var pupils = await _unitOfWork.PupilRepository.GetAllAsync();
+            return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
 using Attendanceregister.DAL.Entities;
+using AttendanceRegister.BLL.JWTAuth;
 
 namespace AttendanceRegister.WebApi.Controllers
 {
@@ -15,12 +16,10 @@ namespace AttendanceRegister.WebApi.Controllers
     [ApiController]
     public class AdminsController : ControllerBase
     {
-        private IConfiguration _configuration;
         private readonly IAdminService _adminService;
 
-        public AdminsController(IConfiguration configuration, IAdminService adminService)
+        public AdminsController(IAdminService adminService)
         {
-            _configuration = configuration;
             _adminService = adminService;
         }
 
@@ -34,18 +33,17 @@ namespace AttendanceRegister.WebApi.Controllers
             {
                 return Unauthorized(adminOr.Errors);
             }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var claims = new List<Claim>
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, admin.Username)
-                }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, admin.Username),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, admin.Role)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(new { token = tokenHandler.WriteToken(token), user = adminOr.Entity });
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            var jwt = new JwtSecurityToken(
+                claims: claimsIdentity.Claims,
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = adminOr.Entity });
         }
     }
 }

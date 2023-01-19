@@ -1,4 +1,6 @@
-﻿using AttendanceRegister.BLL.Interfaces;
+﻿using Attendanceregister.DAL.Entities;
+using AttendanceRegister.BLL.Interfaces;
+using AttendanceRegister.BLL.JWTAuth;
 using AttendanceRegister.BLL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +16,10 @@ namespace AttendanceRegister.WebApi.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        private IConfiguration _configuration;
         private readonly ITeacherService _teacherService;
 
-        public TeachersController(IConfiguration configuration, ITeacherService teacherService)
+        public TeachersController(ITeacherService teacherService)
         {
-            _configuration = configuration;
             _teacherService = teacherService;
         }
 
@@ -33,18 +33,17 @@ namespace AttendanceRegister.WebApi.Controllers
             {
                 return Unauthorized(teacherOr.Errors);
             }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var claims = new List<Claim>
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, teacher.Username)
-                }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, teacher.Username),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, teacher.Role)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(new { token = tokenHandler.WriteToken(token), user = teacherOr.Entity });
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            var jwt = new JwtSecurityToken(
+                claims: claimsIdentity.Claims,
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = teacherOr.Entity });
         }
     }
 }

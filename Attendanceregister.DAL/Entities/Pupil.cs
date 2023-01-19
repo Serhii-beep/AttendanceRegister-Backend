@@ -9,6 +9,7 @@
         public DateTime BirthDate { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
         public virtual Class Class { get; set; }
         public virtual ICollection<Attendance> Attendances { get; set; }
         public virtual ICollection<Mark> Marks { get; set; }

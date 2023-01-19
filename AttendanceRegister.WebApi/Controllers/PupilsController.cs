@@ -1,5 +1,6 @@
 ﻿using Attendanceregister.DAL.Entities;
 using AttendanceRegister.BLL.Interfaces;
+using AttendanceRegister.BLL.JWTAuth;
 using AttendanceRegister.BLL.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,12 +16,10 @@ namespace AttendanceRegister.WebApi.Controllers
     [ApiController]
     public class PupilsController : ControllerBase
     {
-        private IConfiguration _configuration;
         private readonly IPupilService _pupilService;
 
-        public PupilsController(IConfiguration configuration, IPupilService pupilService)
+        public PupilsController(IPupilService pupilService)
         {
-            _configuration = configuration;
             _pupilService = pupilService;
         }
 
@@ -34,18 +33,30 @@ namespace AttendanceRegister.WebApi.Controllers
             {
                 return Unauthorized(pupilOr.Errors);
             }
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var claims = new List<Claim>
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, pupil.Username)
-                }),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, pupil.Username),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, pupil.Role)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return Ok(new { token = tokenHandler.WriteToken(token), user = pupilOr.Entity });
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+            var jwt = new JwtSecurityToken(
+                claims: claimsIdentity.Claims,
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = pupilOr.Entity });
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<List<PupilModel>>> GetAllPupils()
+        {
+            var pupilsOr = await _pupilService.GetAllPupilsAsync();
+            if(!pupilsOr.IsSuccess)
+            {
+                return BadRequest(pupilsOr.Errors);
+            }
+            return Ok(pupilsOr.Entity);
+        }
+
     }
 }
