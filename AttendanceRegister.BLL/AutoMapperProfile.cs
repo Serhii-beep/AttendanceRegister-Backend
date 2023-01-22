@@ -11,6 +11,7 @@ namespace AttendanceRegister.BLL
             CreateMap<Admin, AdminModel>();
             CreateMap<Pupil, PupilModel>();
             CreateMap<Teacher, TeacherModel>();
+            CreateMap<Class, ClassModel>();
         }
     }
 }

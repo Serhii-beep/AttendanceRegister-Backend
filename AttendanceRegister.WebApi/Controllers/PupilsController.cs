@@ -51,12 +51,15 @@ namespace AttendanceRegister.WebApi.Controllers
         public async Task<ActionResult<List<PupilModel>>> GetAllPupils()
         {
             var pupilsOr = await _pupilService.GetAllPupilsAsync();
-            if(!pupilsOr.IsSuccess)
-            {
-                return BadRequest(pupilsOr.Errors);
-            }
-            return Ok(pupilsOr.Entity);
+            return pupilsOr.IsSuccess ? Ok(pupilsOr.Entity) : BadRequest(pupilsOr.Errors);
         }
 
+        [Authorize]
+        [HttpGet("order={order}&page={page:int}&itemsPerPage={itemsPerPage:int}")]
+        public async Task<ActionResult<List<PupilModel>>> GetSortedAndPaginated(string order, int page, int itemsPerPage)
+        {
+            var pupilsOr = await _pupilService.GetPupils(order, page, itemsPerPage);
+            return pupilsOr.IsSuccess ? Ok(pupilsOr.Entity) : BadRequest(pupilsOr.Errors);
+        }
     }
 }

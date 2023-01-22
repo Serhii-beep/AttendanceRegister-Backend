@@ -33,5 +33,24 @@ namespace AttendanceRegister.BLL.Services
             var pupils = await _unitOfWork.PupilRepository.GetAllAsync();
             return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
         }
+
+        public async Task<OperationResult<List<PupilModel>>> GetPupils(string order, int page, int itemsPerPage)
+        {
+            var pupils = await _unitOfWork.PupilRepository.GetAllWithClasses();
+            if(page != 0)
+            {
+                pupils = pupils.Skip(page * itemsPerPage - 1);
+            }
+            pupils = pupils.Take(itemsPerPage);
+            if(order == "asc")
+            {
+                pupils = pupils.OrderBy(p => p.FullName);
+            }
+            if(order == "desc")
+            {
+                pupils = pupils.OrderByDescending(p => p.FullName);
+            }
+            return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
+        }
     }
 }

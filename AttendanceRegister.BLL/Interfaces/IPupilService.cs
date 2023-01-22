@@ -7,5 +7,7 @@ namespace AttendanceRegister.BLL.Interfaces
         Task<OperationResult<PupilModel>> GetPupilAsync(string username, string password);
 
         Task<OperationResult<List<PupilModel>>> GetAllPupilsAsync();
+
+        Task<OperationResult<List<PupilModel>>> GetPupils(string order, int page, int itemsPerPage);
     }
 }
