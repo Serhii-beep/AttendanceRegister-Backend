@@ -7,9 +7,9 @@ namespace AttendanceRegister.BLL.Services
 {
     public class AdminService : IAdminService
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public AdminService(IUnitOfWork unitOfWork, IMapper mapper)
         {

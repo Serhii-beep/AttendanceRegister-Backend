@@ -18,6 +18,7 @@ namespace AttendanceRegister.BLL
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IPupilService, PupilService>();
             services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IMapper, Mapper>(implementationFactory =>
             {
                 var profile = new AutoMapperProfile();
