@@ -9,6 +9,7 @@ namespace Attendanceregister.DAL.Data
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Attendance> Attendances { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<ClassProfile> ClassProfiles { get; set; }
         public virtual DbSet<Lesson> Lessons { get; set; }
         public virtual DbSet<Mark> Marks { get; set; }
         public virtual DbSet<Pupil> Pupils { get; set; }
@@ -27,6 +28,8 @@ namespace Attendanceregister.DAL.Data
             modelBuilder.ApplyConfiguration(new AttendanceConfiguration());
 
             modelBuilder.ApplyConfiguration(new ClassConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ClassProfileConfiguration());
 
             modelBuilder.ApplyConfiguration(new LessonConfiguration());
 
