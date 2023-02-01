@@ -1,7 +1,10 @@
-﻿using Attendanceregister.DAL.Interfaces;
+﻿using Attendanceregister.DAL.Entities;
+using Attendanceregister.DAL.Interfaces;
 using AttendanceRegister.BLL.Interfaces;
 using AttendanceRegister.BLL.Models;
+using AttendanceRegister.BLL.ModelValidators;
 using AutoMapper;
+using FluentValidation.Results;
 
 namespace AttendanceRegister.BLL.Services
 {
@@ -11,10 +14,13 @@ namespace AttendanceRegister.BLL.Services
 
         private readonly IMapper _mapper;
 
+        private readonly Validators _validators;
+
         public PupilService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _validators = new Validators();
         }
 
         public async Task<OperationResult<PupilModel>> GetPupilAsync(string username, string password)
@@ -51,6 +57,26 @@ namespace AttendanceRegister.BLL.Services
                 pupils = pupils.OrderByDescending(p => p.FullName);
             }
             return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
+        }
+
+        public async Task<OperationResult<PupilModel>> AddPupilAsync(PupilModel pupil)
+        {
+            ValidationResult vr = _validators.PupilValidator.Validate(pupil);
+            if(!vr.IsValid)
+            {
+                return OperationResult<PupilModel>.Failture(vr.Errors.Select(e => e.ErrorMessage).ToArray());
+            }
+            Pupil pupilEntity = _mapper.Map<Pupil>(pupil);
+            try
+            {
+                await _unitOfWork.PupilRepository.AddAsync(pupilEntity);
+                await _unitOfWork.SaveAsync();
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<PupilModel>.Failture(ex.Message);
+            }
+            return OperationResult<PupilModel>.Success(_mapper.Map<PupilModel>(pupilEntity));
         }
     }
 }

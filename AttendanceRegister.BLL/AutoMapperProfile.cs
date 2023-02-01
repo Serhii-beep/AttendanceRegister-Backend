@@ -12,6 +12,9 @@ namespace AttendanceRegister.BLL
             CreateMap<Pupil, PupilModel>();
             CreateMap<Teacher, TeacherModel>();
             CreateMap<Class, ClassModel>();
+            CreateMap<ClassProfile, ClassProfileModel>();
+            CreateMap<PupilModel, Pupil>().ForMember(p => p.ClassId, pm => pm.MapFrom(x => x.Class.Id))
+                .ForMember(p => p.Class, opt => opt.Ignore());
         }
     }
 }

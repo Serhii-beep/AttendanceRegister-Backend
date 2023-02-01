@@ -6,6 +6,8 @@
 
         IAttendanceRepository AttendanceRepository { get; }
 
+        IClassProfileRepository ClassProfileRepository { get; }
+
         IClassRepository ClassRepository { get; }
 
         ILessonRepository LessonRepository { get; }

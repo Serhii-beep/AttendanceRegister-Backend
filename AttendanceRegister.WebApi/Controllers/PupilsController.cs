@@ -61,5 +61,13 @@ namespace AttendanceRegister.WebApi.Controllers
             var pupilsOr = await _pupilService.GetPupils(order, page, itemsPerPage);
             return pupilsOr.IsSuccess ? Ok(pupilsOr.Entity) : BadRequest(pupilsOr.Errors);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<ActionResult<PupilModel>> AddPupil(PupilModel pupil)
+        {
+            var pupilOr = await _pupilService.AddPupilAsync(pupil);
+            return pupilOr.IsSuccess ? Ok(pupilOr.Entity) : BadRequest(pupilOr.Errors);
+        }
     }
 }

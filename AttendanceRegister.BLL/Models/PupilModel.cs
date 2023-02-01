@@ -12,4 +12,5 @@
         public string Role { get; set; }
         public ClassModel Class { get; set; }
     }
+
 }

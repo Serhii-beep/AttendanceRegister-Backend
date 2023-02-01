@@ -11,6 +11,8 @@ namespace Attendanceregister.DAL.Data
 
         public IAttendanceRepository AttendanceRepository => new AttendanceEFRepository(_context);
 
+        public IClassProfileRepository ClassProfileRepository => new ClassProfileEFRepository(_context);
+
         public IClassRepository ClassRepository => new ClassEFRepository(_context);
 
         public ILessonRepository LessonRepository => new LessonEFRepository(_context);

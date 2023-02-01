@@ -2,6 +2,7 @@
 using Attendanceregister.DAL.Data;
 using Attendanceregister.DAL.Interfaces;
 using AttendanceRegister.BLL.Interfaces;
+using AttendanceRegister.BLL.ModelValidators;
 using AttendanceRegister.BLL.Services;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ namespace AttendanceRegister.BLL
             services.AddScoped<IPupilService, PupilService>();
             services.AddScoped<ITeacherService, TeacherService>();
             services.AddScoped<IClassService, ClassService>();
+            services.AddScoped<IClassProfileService, ClassProfileService>();
             services.AddScoped<IMapper, Mapper>(implementationFactory =>
             {
                 var profile = new AutoMapperProfile();
