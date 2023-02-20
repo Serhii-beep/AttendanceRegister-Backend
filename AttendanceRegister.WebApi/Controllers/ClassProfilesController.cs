@@ -18,11 +18,19 @@ namespace AttendanceRegister.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("included")]
+        public async Task<ActionResult<IEnumerable<ClassProfileModel>>> GetAllIncluded()
+        {
+            var classProfilesOr = await _classProfileService.GetAllClassesByProfilesAsync();
+            return classProfilesOr.IsSuccess ? Ok(classProfilesOr.Entity) : BadRequest(classProfilesOr.Errors);
+        }
+
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClassProfileModel>>> GetAll()
         {
-            var classProfilesOr = await _classProfileService.GetAllClassesByProfiles();
-            return classProfilesOr.IsSuccess ? Ok(classProfilesOr.Entity) : BadRequest(classProfilesOr.Errors);
+            var profilesOr = await _classProfileService.GetAllProfilesAsync();
+            return profilesOr.IsSuccess ? Ok(profilesOr.Entity) : BadRequest(profilesOr.Errors);
         }
     }
 }

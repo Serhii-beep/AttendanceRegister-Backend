@@ -4,6 +4,8 @@ namespace AttendanceRegister.BLL.Interfaces
 {
     public interface IClassProfileService
     {
-        Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllClassesByProfiles();
+        Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllClassesByProfilesAsync();
+
+        Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllProfilesAsync();
     }
 }

@@ -78,5 +78,19 @@ namespace AttendanceRegister.BLL.Services
             }
             return OperationResult<PupilModel>.Success(_mapper.Map<PupilModel>(pupilEntity));
         }
+
+        public async Task<OperationResult<PupilModel>> DeletePupilByIdAsync(int id)
+        {
+            try
+            {
+                await _unitOfWork.PupilRepository.DeleteByIdAsync(id);
+                await _unitOfWork.SaveAsync();
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<PupilModel>.Failture(ex.Message);
+            }
+            return OperationResult<PupilModel>.Success(null);
+        }
     }
 }

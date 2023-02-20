@@ -17,10 +17,16 @@ namespace AttendanceRegister.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllClassesByProfiles()
+        public async Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllClassesByProfilesAsync()
         {
             var classes = await _unitOfWork.ClassProfileRepository.GetAllWithClassesAsync();
             return OperationResult<IEnumerable<ClassProfileModel>>.Success(_mapper.Map<List<ClassProfileModel>>(classes));
+        }
+
+        public async Task<OperationResult<IEnumerable<ClassProfileModel>>> GetAllProfilesAsync()
+        {
+            var profiles = await _unitOfWork.ClassProfileRepository.GetAllAsync();
+            return OperationResult<IEnumerable<ClassProfileModel>>.Success(_mapper.Map<List<ClassProfileModel>>(profiles));
         }
     }
 }

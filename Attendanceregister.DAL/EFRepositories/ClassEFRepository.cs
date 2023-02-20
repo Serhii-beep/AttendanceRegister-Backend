@@ -10,5 +10,10 @@ namespace Attendanceregister.DAL.EFRepositories
         public ClassEFRepository(AttendanceRegisterDbContext context) : base(context)
         {
         }
+
+        public async Task<IEnumerable<Class>> GetAllWithProfilesAndPupilsAsync()
+        {
+            return await DbSet.Include(c => c.ClassProfile).Include(c => c.Pupils).ToListAsync();
+        }
     }
 }
