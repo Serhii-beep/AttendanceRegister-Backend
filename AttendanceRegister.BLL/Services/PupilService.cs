@@ -92,5 +92,25 @@ namespace AttendanceRegister.BLL.Services
             }
             return OperationResult<PupilModel>.Success(null);
         }
+
+        public async Task<OperationResult<PupilModel>> UpdatePupilAsync(PupilModel pupil)
+        {
+            ValidationResult vr = _validators.PupilValidator.Validate(pupil);
+            if(!vr.IsValid)
+            {
+                return OperationResult<PupilModel>.Failture(vr.Errors.Select(e => e.ErrorMessage).ToArray());
+            }
+            Pupil pupilEntity = _mapper.Map<Pupil>(pupil);
+            try
+            {
+                _unitOfWork.PupilRepository.Update(pupilEntity);
+                await _unitOfWork.SaveAsync();
+            }
+            catch(Exception ex)
+            {
+                return OperationResult<PupilModel>.Failture(ex.Message);
+            }
+            return OperationResult<PupilModel>.Success(_mapper.Map<PupilModel>(pupilEntity));
+        }
     }
 }

@@ -12,6 +12,8 @@ namespace AttendanceRegister.BLL.Interfaces
 
         Task<OperationResult<PupilModel>> AddPupilAsync(PupilModel pupil);
 
+        Task<OperationResult<PupilModel>> UpdatePupilAsync(PupilModel pupil);
+
         Task<OperationResult<PupilModel>> DeletePupilByIdAsync(int id);
     }
 }

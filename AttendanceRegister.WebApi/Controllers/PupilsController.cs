@@ -77,5 +77,13 @@ namespace AttendanceRegister.WebApi.Controllers
             var pupilOr = await _pupilService.DeletePupilByIdAsync(id);
             return pupilOr.IsSuccess ? Ok() : BadRequest(pupilOr.Errors);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut]
+        public async Task<ActionResult<PupilModel>> UpdatePupil(PupilModel pupil)
+        {
+            var pupilOr = await _pupilService.UpdatePupilAsync(pupil);
+            return pupilOr.IsSuccess ? Ok(pupilOr.Entity) : BadRequest(pupilOr.Errors);
+        }
     }
 }
