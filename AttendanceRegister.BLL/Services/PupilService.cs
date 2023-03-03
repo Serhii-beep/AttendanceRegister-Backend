@@ -40,7 +40,7 @@ namespace AttendanceRegister.BLL.Services
             return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
         }
 
-        public async Task<OperationResult<List<PupilModel>>> GetPupils(string order, int page, int itemsPerPage)
+        public async Task<OperationResult<List<PupilModel>>> GetPupilsAsync(string order, int page, int itemsPerPage)
         {
             var pupils = await _unitOfWork.PupilRepository.GetAllWithClasses();
             if(page != 0)

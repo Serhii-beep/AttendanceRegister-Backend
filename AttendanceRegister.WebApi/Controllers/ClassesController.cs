@@ -1,7 +1,6 @@
 ﻿using AttendanceRegister.BLL.Interfaces;
 using AttendanceRegister.BLL.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceRegister.WebApi.Controllers
@@ -33,5 +32,20 @@ namespace AttendanceRegister.WebApi.Controllers
             return classesOr.IsSuccess ? Ok(classesOr.Entity) : BadRequest(classesOr.Errors);
         }
 
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ClassModel>> DeleteById(int id)
+        {
+            var classOr = await _classService.DeleteClassByIdAsync(id);
+            return classOr.IsSuccess ? Ok(classOr.Entity) : BadRequest(classOr.Errors);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPut]
+        public async Task<ActionResult<ClassModel>> UpdateAsync(ClassModel classModel)
+        {
+            var classOr = await _classService.UpdateClassAsync(classModel);
+            return classOr.IsSuccess ? Ok(classOr.Entity) : BadRequest(classOr.Errors);
+        }
     }
 }

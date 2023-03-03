@@ -58,7 +58,7 @@ namespace AttendanceRegister.WebApi.Controllers
         [HttpGet("order={order}&page={page:int}&itemsPerPage={itemsPerPage:int}")]
         public async Task<ActionResult<List<PupilModel>>> GetSortedAndPaginated(string order, int page, int itemsPerPage)
         {
-            var pupilsOr = await _pupilService.GetPupils(order, page, itemsPerPage);
+            var pupilsOr = await _pupilService.GetPupilsAsync(order, page, itemsPerPage);
             return pupilsOr.IsSuccess ? Ok(pupilsOr.Entity) : BadRequest(pupilsOr.Errors);
         }
 
