@@ -5,4 +5,20 @@ services:
     image: ${DOCKER_REGISTRY-}attendanceregisterwebapi
     build:
       context: .
-      dockerfile: AttendanceRegister.WebApi/Dockerfile
+      dockerfile: src/AttendanceRegister.WebApi/Dockerfile
+    ports:
+      - 8080:80
+      - 8081:443
+    depends_on:
+      - sqlserver
+  sqlserver:
+    restart: unless-stopped
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sql_server2022
+    environment:
+      - SA_PASSWORD=P@ssword123
+      - ACCEPT_EULA=Y
+    volumes:
+      - "./data-mssql:/var/opt/mssql/data"
+    ports:
+      - 5050:1433
