@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string ProfileName { get; set; }
+
         public ICollection<ClassModel> Classes { get; set; }
 
         public ClassProfileModel()

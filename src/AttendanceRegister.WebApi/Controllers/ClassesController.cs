@@ -25,11 +25,27 @@ namespace AttendanceRegister.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClassModel>> GetById(int id)
+        {
+            var classOr = await _classService.GetClassByIdAsync(id);
+            return classOr.IsSuccess ? Ok(classOr.Entity) : BadRequest(classOr.Errors);
+        }
+
+        [Authorize]
         [HttpGet("included")]
         public async Task<ActionResult<IEnumerable<ClassInfoModel>>> GetAllIncluded()
         {
             var classesOr = await _classService.GetClassesIncludedAsync();
             return classesOr.IsSuccess ? Ok(classesOr.Entity) : BadRequest(classesOr.Errors);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<ActionResult<ClassModel>> AddClass(ClassModel model)
+        {
+            var classOr = await _classService.AddClassAsync(model);
+            return classOr.IsSuccess ? Ok(classOr.Entity) : BadRequest(classOr.Errors); 
         }
 
         [Authorize(Roles = "admin")]

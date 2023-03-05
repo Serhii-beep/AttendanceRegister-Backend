@@ -15,5 +15,11 @@ namespace Attendanceregister.DAL.EFRepositories
         {
             return await DbSet.Include(c => c.ClassProfile).Include(c => c.Pupils).ToListAsync();
         }
+
+        public async Task<Class> GetByIdWithProfileAsync(int id)
+        {
+            var classes = await DbSet.Include(c => c.ClassProfile).ToListAsync();
+            return classes.FirstOrDefault(c => c.Id == id);
+        }
     }
 }

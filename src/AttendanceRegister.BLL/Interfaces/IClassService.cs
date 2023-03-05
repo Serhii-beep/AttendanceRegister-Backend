@@ -11,5 +11,9 @@ namespace AttendanceRegister.BLL.Interfaces
         Task<OperationResult<ClassModel>> DeleteClassByIdAsync(int id);
 
         Task<OperationResult<ClassModel>> UpdateClassAsync(ClassModel classModel);
+
+        Task<OperationResult<ClassModel>> GetClassByIdAsync(int id);
+
+        Task<OperationResult<ClassModel>> AddClassAsync(ClassModel classModel);
     }
 }
