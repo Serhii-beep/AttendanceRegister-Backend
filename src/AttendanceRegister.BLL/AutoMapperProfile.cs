@@ -10,7 +10,7 @@ namespace AttendanceRegister.BLL
         {
             CreateMap<Admin, AdminModel>();
             CreateMap<Pupil, PupilModel>();
-            CreateMap<Teacher, TeacherModel>();
+            CreateMap<Teacher, TeacherModel>().ReverseMap();
             CreateMap<Class, ClassModel>();
             CreateMap<ClassModel, Class>();
             CreateMap<ClassProfile, ClassProfileModel>();
