@@ -26,24 +26,61 @@ namespace AttendanceRegister.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("authenticate")]
-        public async Task<IActionResult> Authenticate(UserAuthorizationModel admin)
+        public async Task<IActionResult> Authenticate(UserAuthorizationModel user)
         {
-            var adminOr = await _adminService.GetAdminAsync(admin.Username, admin.Password);
-            if(!adminOr.IsSuccess)
+            var us = await _adminService.GetUserAsync(user.Username, user.Password);
+            AdminModel admin;
+            TeacherModel teacher;
+            PupilModel pupil;
+            if(!us.IsSuccess)
             {
-                return Unauthorized(adminOr.Errors);
+                return Unauthorized(us.Errors);
             }
-            var claims = new List<Claim>
+            if(us.Entity is AdminModel modeladmin)
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, admin.Username),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, admin.Role)
-            };
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
-            var jwt = new JwtSecurityToken(
-                claims: claimsIdentity.Claims,
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = adminOr.Entity });
+                admin = modeladmin;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, admin.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, admin.Role)
+                };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+                var jwt = new JwtSecurityToken(
+                    claims: claimsIdentity.Claims,
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = admin });
+            }
+            else if(us.Entity is TeacherModel modelteacher)
+            {
+                teacher = modelteacher;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, teacher.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, teacher.Role)
+                };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+                var jwt = new JwtSecurityToken(
+                    claims: claimsIdentity.Claims,
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = teacher });
+            }
+            else
+            {
+                pupil = us.Entity as PupilModel;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, pupil.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, pupil.Role)
+                };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType);
+                var jwt = new JwtSecurityToken(
+                    claims: claimsIdentity.Claims,
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = pupil });
+            }
         }
     }
 }

@@ -4,6 +4,6 @@ namespace AttendanceRegister.BLL.Interfaces
 {
     public interface IAdminService
     {
-        Task<OperationResult<AdminModel>> GetAdminAsync(string username, string password);
+        Task<OperationResult<object>> GetUserAsync(string username, string password);
     }
 }

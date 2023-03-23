@@ -23,29 +23,6 @@ namespace AttendanceRegister.WebApi.Controllers
             _teacherService = teacherService;
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("authenticate")]
-        public async Task<IActionResult> Authenticate(UserAuthorizationModel teacher)
-        {
-            var teacherOr = await _teacherService.GetTeacherAsync(teacher.Username, teacher.Password);
-            if(!teacherOr.IsSuccess)
-            {
-                return Unauthorized(teacherOr.Errors);
-            }
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, teacher.Username),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, teacher.Role)
-            };
-            ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType);
-            var jwt = new JwtSecurityToken(
-                claims: claimsIdentity.Claims,
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(jwt), user = teacherOr.Entity });
-        }
-
         [Authorize]
         [HttpGet("order={order}&page={page:int}&itemsPerPage={itemsPerPage:int}")]
         public async Task<ActionResult<IEnumerable<TeacherModel>>> GetAll(string order, int page, int itemsPerPage)

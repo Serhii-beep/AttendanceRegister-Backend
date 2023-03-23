@@ -17,15 +17,27 @@ namespace AttendanceRegister.BLL.Services
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<AdminModel>> GetAdminAsync(string username, string password)
+        public async Task<OperationResult<object>> GetUserAsync(string username, string password)
         {
             var admins = await _unitOfWork.AdminRepository.GetAllAsync();
+            var teachers = await _unitOfWork.TeacherRepository.GetAllAsync();
+            var pupils = await _unitOfWork.PupilRepository.GetAllAsync();
             var admin = admins.FirstOrDefault(a => a.Login == username && a.Password == password);
-            if(admin == null)
+            if(admin != null)
             {
-                return OperationResult<AdminModel>.Failture("Invalid username or password");
+                return OperationResult<object>.Success(_mapper.Map<AdminModel>(admin));
             }
-            return OperationResult<AdminModel>.Success(_mapper.Map<AdminModel>(admin));
+            var teacher = teachers.FirstOrDefault(t => t.Login == username && t.Password == password);
+            if(teacher != null)
+            {
+                return OperationResult<object>.Success(_mapper.Map<TeacherModel>(teacher));
+            }
+            var pupil = pupils.FirstOrDefault(p => p.Login == username && p.Password == password);
+            if(pupil != null)
+            {
+                return OperationResult<object>.Success(_mapper.Map<PupilModel>(pupil));
+            }
+            return OperationResult<object>.Failture($"Invalid username or password");
         }
     }
 }
