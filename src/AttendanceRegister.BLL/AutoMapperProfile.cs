@@ -19,6 +19,7 @@ namespace AttendanceRegister.BLL
                 .ForMember(p => p.Class, opt => opt.Ignore());
             CreateMap<Class, ClassInfoModel>().ForMember(cm => cm.ProfileName, c => c.MapFrom(x => x.ClassProfile.ProfileName))
                 .ForMember(cm => cm.NumberOfPupils, c => c.MapFrom(x => x.Pupils.Count));
+            CreateMap<Subject, SubjectModel>().ReverseMap();
         }
     }
 }
