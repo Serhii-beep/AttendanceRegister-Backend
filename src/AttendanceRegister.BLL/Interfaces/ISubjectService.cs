@@ -6,7 +6,9 @@ namespace AttendanceRegister.BLL.Interfaces
     {
         Task<OperationResult<IEnumerable<SubjectModel>>> GetAllSubjectsAsync();
 
-        Task<OperationResult<SubjectModel>> UpdateSubjectTeachersAsync(SubjectModel newModel);
+        Task<OperationResult<SubjectModel>> GetSubjectByIdAsync(int id);
+
+        Task<OperationResult<SubjectModel>> UpdateSubjectTeachersClassesAsync(SubjectModel subjectModel);
 
         Task<OperationResult<SubjectModel>> AddSubjectAsync(SubjectModel newSubject);
 

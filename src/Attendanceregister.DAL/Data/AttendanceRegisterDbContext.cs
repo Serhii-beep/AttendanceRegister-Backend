@@ -17,10 +17,10 @@ namespace Attendanceregister.DAL.Data
         public virtual DbSet<SubjectClass> SubjectClasses { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
-
+        
         public AttendanceRegisterDbContext(DbContextOptions<AttendanceRegisterDbContext> options) : base(options)
         { }
-     
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AdminConfiguration());

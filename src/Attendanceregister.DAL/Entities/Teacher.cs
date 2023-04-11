@@ -8,9 +8,11 @@
         public string Email { get; set; }
         public string Role { get; set; }
         public virtual ICollection<TeacherSubject> TeacherSubjects { get; set; }
+        public virtual ICollection<Class> Classes { get; set; }
         public Teacher()
         {
             TeacherSubjects = new List<TeacherSubject>();
+            Classes = new List<Class>();
         }
     }
 }

@@ -60,11 +60,6 @@ namespace AttendanceRegister.BLL.Services
         public async Task<OperationResult<IEnumerable<TeacherModel>>> GetAllTeachersAsync(string order, int page, int itemsPerPage)
         {
             var teachers = await _unitOfWork.TeacherRepository.GetAllAsync();
-            if(page != 0)
-            {
-                teachers = teachers.Skip(page * itemsPerPage - 1);
-            }
-            teachers = teachers.Take(itemsPerPage);
             if(order == "asc")
             {
                 teachers = teachers.OrderBy(p => p.FullName);
@@ -73,6 +68,11 @@ namespace AttendanceRegister.BLL.Services
             {
                 teachers = teachers.OrderByDescending(p => p.FullName);
             }
+            if(page != 0)
+            {
+                teachers = teachers.Skip(page * itemsPerPage);
+            }
+            teachers = teachers.Take(itemsPerPage);
             return OperationResult<IEnumerable<TeacherModel>>.Success(_mapper.Map<List<TeacherModel>>(teachers));
         }
 

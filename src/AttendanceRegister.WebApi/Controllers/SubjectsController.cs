@@ -25,11 +25,19 @@ namespace AttendanceRegister.WebApi.Controllers
             return Ok(subjectsOr.Entity);
         }
 
+        [Authorize]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SubjectModel>> GetById(int id)
+        {
+            var subjectOr = await _subjectService.GetSubjectByIdAsync(id);
+            return subjectOr.IsSuccess ? Ok(subjectOr.Entity) : BadRequest(subjectOr.Errors);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost("teachers")]
-        public async Task<ActionResult<SubjectModel>> UpdateSubjectTeachers(SubjectModel newModel)
+        public async Task<ActionResult<SubjectModel>> UpdateSubjectTeachersClasses(SubjectModel newModel)
         {
-            var resp = await _subjectService.UpdateSubjectTeachersAsync(newModel);
+            var resp = await _subjectService.UpdateSubjectTeachersClassesAsync(newModel);
             return resp.IsSuccess ? Ok(resp.Entity) : BadRequest(resp.Errors);
         }
 

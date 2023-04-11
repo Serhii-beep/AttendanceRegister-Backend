@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public string ProfileName { get; set; }
         public int NumberOfPupils { get; set; }
+        public string Supervisor { get; set; }
     }
 }

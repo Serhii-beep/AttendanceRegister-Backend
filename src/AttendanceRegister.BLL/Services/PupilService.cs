@@ -43,11 +43,6 @@ namespace AttendanceRegister.BLL.Services
         public async Task<OperationResult<List<PupilModel>>> GetPupilsAsync(string order, int page, int itemsPerPage)
         {
             var pupils = await _unitOfWork.PupilRepository.GetAllWithClasses();
-            if(page != 0)
-            {
-                pupils = pupils.Skip(page * itemsPerPage - 1);
-            }
-            pupils = pupils.Take(itemsPerPage);
             if(order == "asc")
             {
                 pupils = pupils.OrderBy(p => p.FullName);
@@ -56,6 +51,11 @@ namespace AttendanceRegister.BLL.Services
             {
                 pupils = pupils.OrderByDescending(p => p.FullName);
             }
+            if(page != 0)
+            {
+                pupils = pupils.Skip(page * itemsPerPage);
+            }
+            pupils = pupils.Take(itemsPerPage);
             return OperationResult<List<PupilModel>>.Success(_mapper.Map<List<PupilModel>>(pupils));
         }
 

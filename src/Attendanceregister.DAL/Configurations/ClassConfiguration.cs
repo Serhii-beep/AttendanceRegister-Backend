@@ -10,10 +10,17 @@ namespace Attendanceregister.DAL.Configurations
         {
             builder.Property(e => e.Name).IsRequired().HasColumnType("nvarchar(30)");
 
+            builder.Property(e => e.TeacherId).HasDefaultValue(1);
+
             builder.HasOne(c => c.ClassProfile)
                 .WithMany(cp => cp.Classes)
                 .HasForeignKey(c => c.ClassProfileId)
                 .HasConstraintName("CN_Classes_ClassProfiles");
+
+            builder.HasOne(c => c.Teacher)
+                .WithMany(t => t.Classes)
+                .HasForeignKey(c => c.TeacherId)
+                .HasConstraintName("CN_Classes_Teachers");
         }
     }
 }

@@ -89,9 +89,16 @@ namespace Attendanceregister.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int>("TeacherId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClassProfileId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Classes");
                 });
@@ -335,7 +342,16 @@ namespace Attendanceregister.DAL.Migrations
                         .IsRequired()
                         .HasConstraintName("CN_Classes_ClassProfiles");
 
+                    b.HasOne("Attendanceregister.DAL.Entities.Teacher", "Teacher")
+                        .WithMany("Classes")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("CN_Classes_Teachers");
+
                     b.Navigation("ClassProfile");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Lesson", b =>
@@ -465,6 +481,8 @@ namespace Attendanceregister.DAL.Migrations
 
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Teacher", b =>
                 {
+                    b.Navigation("Classes");
+
                     b.Navigation("TeacherSubjects");
                 });
 #pragma warning restore 612, 618

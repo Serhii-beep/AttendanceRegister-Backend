@@ -91,7 +91,20 @@ namespace AttendanceRegister.BLL.Services
         public async Task<OperationResult<IEnumerable<ClassInfoModel>>> GetClassesIncludedAsync()
         {
             var classes = await _unitOfWork.ClassRepository.GetAllWithProfilesAndPupilsAsync();
-            return OperationResult<IEnumerable<ClassInfoModel>>.Success(_mapper.Map<List<ClassInfoModel>>(classes));
+            var teachers = await _unitOfWork.TeacherRepository.GetAllAsync();
+            var classInfo = new List<ClassInfoModel>();
+            foreach(var classEntity in classes)
+            {
+                classInfo.Add(new()
+                {
+                    Id = classEntity.Id,
+                    Name = classEntity.Name,
+                    ProfileName = classEntity.ClassProfile.ProfileName,
+                    NumberOfPupils = classEntity.Pupils.Count,
+                    Supervisor = teachers.FirstOrDefault(t => t.Id == classEntity.TeacherId)?.FullName
+                });
+            }
+            return OperationResult<IEnumerable<ClassInfoModel>>.Success(classInfo);
         }
 
         public async Task<OperationResult<ClassModel>> UpdateClassAsync(ClassModel classModel)
