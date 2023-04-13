@@ -18,6 +18,7 @@ namespace Attendanceregister.DAL.Data
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<TeacherSubject> TeacherSubjects { get; set; }
         
+        
         public AttendanceRegisterDbContext(DbContextOptions<AttendanceRegisterDbContext> options) : base(options)
         { }
 
