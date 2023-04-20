@@ -11,11 +11,9 @@
         public string Password { get; set; }
         public string Role { get; set; }
         public virtual Class Class { get; set; }
-        public virtual ICollection<Attendance> Attendances { get; set; }
         public virtual ICollection<Mark> Marks { get; set; }
         public Pupil()
         {
-            Attendances = new List<Attendance>();
             Marks = new List<Mark>();
         }
 

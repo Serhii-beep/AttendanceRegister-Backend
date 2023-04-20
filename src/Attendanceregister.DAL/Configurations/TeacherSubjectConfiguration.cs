@@ -12,13 +12,13 @@ namespace Attendanceregister.DAL.Configurations
                 .WithMany(t => t.TeacherSubjects)
                 .HasForeignKey(ts => ts.TeacherId)
                 .HasConstraintName("CN_TeacherSubjects_Teachers")
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(ts => ts.Subject)
                 .WithMany(s => s.TeacherSubjects)
                 .HasForeignKey(ts => ts.SubjectId)
                 .HasConstraintName("CN_TeacherSubjects_Subjects")
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

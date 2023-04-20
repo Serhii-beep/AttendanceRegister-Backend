@@ -4,6 +4,7 @@ using Attendanceregister.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Attendanceregister.DAL.Migrations
 {
     [DbContext(typeof(AttendanceRegisterDbContext))]
-    partial class AttendanceRegisterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230418004031_CascadeDeleteBehaviorSubjects")]
+    partial class CascadeDeleteBehaviorSubjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,18 +107,6 @@ namespace Attendanceregister.DAL.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsAnnual")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFinal")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSemester")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("SectionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SubjectClassId")
                         .HasColumnType("int");
 
@@ -124,8 +115,6 @@ namespace Attendanceregister.DAL.Migrations
                         .HasColumnType("nvarchar(75)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SectionId");
 
                     b.HasIndex("SubjectClassId");
 
@@ -202,26 +191,6 @@ namespace Attendanceregister.DAL.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("Pupils");
-                });
-
-            modelBuilder.Entity("Attendanceregister.DAL.Entities.Section", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Term")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sections");
                 });
 
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Subject", b =>
@@ -343,21 +312,12 @@ namespace Attendanceregister.DAL.Migrations
 
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Lesson", b =>
                 {
-                    b.HasOne("Attendanceregister.DAL.Entities.Section", "Section")
-                        .WithMany("Lessons")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("CN_Lessons_Sections");
-
                     b.HasOne("Attendanceregister.DAL.Entities.SubjectClass", "SubjectClass")
                         .WithMany("Lessons")
                         .HasForeignKey("SubjectClassId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired()
                         .HasConstraintName("CN_Lessons_SubjectClasses");
-
-                    b.Navigation("Section");
 
                     b.Navigation("SubjectClass");
                 });
@@ -457,11 +417,6 @@ namespace Attendanceregister.DAL.Migrations
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Pupil", b =>
                 {
                     b.Navigation("Marks");
-                });
-
-            modelBuilder.Entity("Attendanceregister.DAL.Entities.Section", b =>
-                {
-                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("Attendanceregister.DAL.Entities.Subject", b =>

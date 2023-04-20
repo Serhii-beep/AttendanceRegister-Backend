@@ -4,7 +4,7 @@
     {
         public int LessonId { get; set; }
         public int PupilId { get; set; }
-        public int Value { get; set; }
+        public string Value { get; set; }
         public virtual Lesson Lesson { get; set; }
         public virtual Pupil Pupil { get; set; }
     }

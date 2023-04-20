@@ -2,7 +2,7 @@
 
 namespace Attendanceregister.DAL.Interfaces
 {
-    public interface IAttendanceRepository : IRepository<Attendance>
+    public interface ISectionRepository : IRepository<Section>
     {
     }
 }

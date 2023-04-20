@@ -17,6 +17,11 @@ namespace Attendanceregister.DAL.Configurations
                 .HasForeignKey(l => l.SubjectClassId)
                 .HasConstraintName("CN_Lessons_SubjectClasses")
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(l => l.Section)
+                .WithMany(s => s.Lessons)
+                .HasForeignKey(l => l.SectionId)
+                .HasConstraintName("CN_Lessons_Sections");
         }
     }
 }

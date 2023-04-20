@@ -9,8 +9,6 @@ namespace Attendanceregister.DAL.Data
 
         public IAdminRepository AdminRepository => new AdminEFRepository(_context);
 
-        public IAttendanceRepository AttendanceRepository => new AttendanceEFRepository(_context);
-
         public IClassProfileRepository ClassProfileRepository => new ClassProfileEFRepository(_context);
 
         public IClassRepository ClassRepository => new ClassEFRepository(_context);
@@ -28,6 +26,8 @@ namespace Attendanceregister.DAL.Data
         public ITeacherRepository TeacherRepository => new TeacherEFRepository(_context);
 
         public ITeacherSubjectRepository TeacherSubjectRepository => new TeacherSubjectEFRepository(_context);
+
+        public ISectionRepository SectionRepository => new SectionEFRepository(_context);
 
         public UnitOfWork(AttendanceRegisterDbContext context)
         {

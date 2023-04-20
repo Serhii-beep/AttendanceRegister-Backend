@@ -4,8 +4,6 @@
     {
         IAdminRepository AdminRepository { get; }
 
-        IAttendanceRepository AttendanceRepository { get; }
-
         IClassProfileRepository ClassProfileRepository { get; }
 
         IClassRepository ClassRepository { get; }
@@ -23,6 +21,8 @@
         ITeacherRepository TeacherRepository { get; }
 
         ITeacherSubjectRepository TeacherSubjectRepository { get; }
+
+        ISectionRepository SectionRepository { get; }
 
         Task SaveAsync();
     }
