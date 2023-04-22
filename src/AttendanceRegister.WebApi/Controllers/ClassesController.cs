@@ -33,6 +33,15 @@ namespace AttendanceRegister.WebApi.Controllers
         }
 
         [Authorize]
+        [HttpGet("teacher={teacherId}")]
+        public async Task<ActionResult<IEnumerable<ClassInfoModel>>> GetByTeacher(int teacherId)
+        {
+            var classesOr = await _classService.GetClassesByTeacherAsync(teacherId);
+            return classesOr.IsSuccess ? Ok(classesOr.Entity) : BadRequest(classesOr.Errors);
+        }
+
+
+        [Authorize]
         [HttpGet("included")]
         public async Task<ActionResult<IEnumerable<ClassInfoModel>>> GetAllIncluded()
         {

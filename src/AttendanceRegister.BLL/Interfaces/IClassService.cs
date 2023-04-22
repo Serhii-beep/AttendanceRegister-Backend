@@ -8,6 +8,8 @@ namespace AttendanceRegister.BLL.Interfaces
 
         Task<OperationResult<IEnumerable<ClassInfoModel>>> GetClassesIncludedAsync();
 
+        Task<OperationResult<IEnumerable<ClassInfoModel>>> GetClassesByTeacherAsync(int teacherId);
+
         Task<OperationResult<ClassModel>> DeleteClassByIdAsync(int id);
 
         Task<OperationResult<ClassModel>> UpdateClassAsync(ClassModel classModel);

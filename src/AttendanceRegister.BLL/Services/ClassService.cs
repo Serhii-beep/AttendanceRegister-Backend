@@ -88,6 +88,30 @@ namespace AttendanceRegister.BLL.Services
             return OperationResult<ClassModel>.Success(_mapper.Map<ClassModel>(classEntity));
         }
 
+        public async Task<OperationResult<IEnumerable<ClassInfoModel>>> GetClassesByTeacherAsync(int teacherId)
+        {
+            var classes = await _unitOfWork.ClassRepository.GetAllWithProfilesAndPupilsAsync();
+            var classesSubjects = await _unitOfWork.SubjectClassRepository.GetAllAsync();
+            var teachersSubjects = await _unitOfWork.TeacherSubjectRepository.GetAllAsync();
+            var filteredTeachersSubjects = teachersSubjects.Where(ts => ts.TeacherId == teacherId);
+            var filteredClassesSubjects = classesSubjects.Where(cs => filteredTeachersSubjects.Any(ts => ts.SubjectId == cs.SubjectId));
+            var filteredClasses = classes.Where(c => filteredClassesSubjects.Any(cs => cs.ClassId == c.Id)).ToList();
+            var teachers = await _unitOfWork.TeacherRepository.GetAllAsync();
+            var classInfo = new List<ClassInfoModel>();
+            foreach(var classEntity in filteredClasses)
+            {
+                classInfo.Add(new()
+                {
+                    Id = classEntity.Id,
+                    Name = classEntity.Name,
+                    ProfileName = classEntity.ClassProfile.ProfileName,
+                    NumberOfPupils = classEntity.Pupils.Count,
+                    Supervisor = teachers.FirstOrDefault(t => t.Id == classEntity.TeacherId)?.FullName
+                });
+            }
+            return OperationResult<IEnumerable<ClassInfoModel>>.Success(classInfo);
+        }
+
         public async Task<OperationResult<IEnumerable<ClassInfoModel>>> GetClassesIncludedAsync()
         {
             var classes = await _unitOfWork.ClassRepository.GetAllWithProfilesAndPupilsAsync();
